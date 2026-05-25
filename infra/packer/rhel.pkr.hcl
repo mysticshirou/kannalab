@@ -8,13 +8,13 @@ packer {
 }
 
 source "proxmox-iso" "rhel-template" {
-  proxmox_url = "${var.proxmox_url}"
-  username = "${var.proxmox_username}"
-  password = "${var.proxmox_password}"
-  node = "${var.proxmox_node}"
+  proxmox_url = var.proxmox_url
+  username = var.proxmox_username
+  password = var.proxmox_password
+  node = var.proxmox_node
   insecure_skip_tls_verify = true
 
-  http_directory = "${var.http_server}"
+  http_directory = var.http_server
 
   vm_name = "rhel-template"
   vm_id = 999
@@ -22,8 +22,8 @@ source "proxmox-iso" "rhel-template" {
   template_name = "rhel-template"
   template_description = "Red Hat Enterprise Linux template"
 
-  memory = 2048
-  cores = 2
+  memory = 4096
+  cores = 4
   sockets = 1
   cpu_type = "host"
 
@@ -39,7 +39,7 @@ source "proxmox-iso" "rhel-template" {
 
   disks {
     type = "scsi"
-    disk_size = "32G"
+    disk_size = "100G"
     storage_pool = "local-lvm"
     storage_pool_type = "lvm"
   }
@@ -53,8 +53,8 @@ source "proxmox-iso" "rhel-template" {
   boot_wait = "10s"
   boot_command = ["<up>e<down><down><end> ip=dhcp inst.cmdline inst.ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/ks.cfg rhsm_password_server=http://{{ .HTTPIP }}:{{ .HTTPPort }}/rhsm-password.yml <leftCtrlOn>x<leftCtrlOff>"]
 
-  ssh_username = "${var.ssh_username}"
-  ssh_password = "${var.ssh_password}"
+  ssh_username = var.ssh_username
+  ssh_password = var.ssh_password
   ssh_timeout = "15m"
 }
 

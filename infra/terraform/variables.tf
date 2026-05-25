@@ -18,3 +18,9 @@ variable "proxmox_password" {
 variable "proxmox_rhel_template_id" {
   type = number
 }
+
+variable "servers" {
+  type = map(object({
+    id = number
+  }))
+}
