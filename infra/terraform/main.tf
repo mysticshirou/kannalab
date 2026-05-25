@@ -36,7 +36,24 @@ resource "proxmox_virtual_environment_vm" "server" {
   }
 
   initialization {
+    dns {
+      servers = ["1.1.1.1", "8.8.8.8"]
+    }
+
+    ip_config {
+      ipv4 {
+        address = each.value.static_ip
+      }
+    }
+
     user_data_file_id = proxmox_virtual_environment_file.user_data_cloud_config["${each.key}"].id
     meta_data_file_id = proxmox_virtual_environment_file.meta_data_cloud_config["${each.key}"].id
+  }
+}
+
+output "server_ips" {
+  value = {
+    for key, vm in proxmox_virtual_environment_vm.server :
+    key => flatten(vm.ipv4_addresses)
   }
 }
