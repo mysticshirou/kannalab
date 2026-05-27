@@ -43,6 +43,7 @@ resource "proxmox_virtual_environment_vm" "server" {
     ip_config {
       ipv4 {
         address = each.value.static_ip
+        gateway = var.gateway
       }
     }
 

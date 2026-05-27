@@ -21,6 +21,32 @@ resource "proxmox_virtual_environment_file" "user_data_cloud_config" {
         ssh_authorized_keys:
           - ${trimspace(data.local_file.ssh_public_key.content)}
         sudo: ALL=(ALL) NOPASSWD:ALL
+    rh_subscription:
+      activation-key: ${var.rhel_activation_key}
+      org: ${var.rhel_organization}
+    packages:
+      - fail2ban
+    package_update: true
+    package_upgrade: true
+    write_files:
+      - path: /etc/ssh/sshd_config.d/ssh-hardening.conf
+        content: |
+          PermitRootLogin no
+          PasswordAuthentication no
+          Port 22
+          KbdInteractiveAuthentication no
+          ChallengeResponseAuthentication no
+          MaxAuthTries 2
+          AllowTcpForwarding no
+          X11Forwarding no
+          AllowAgentForwarding no
+          AuthorizedKeysFile .ssh/authorized_keys
+          AllowUsers kanna
+    runcmd:
+      - printf "[sshd]\nenabled = true\nport = ssh, 22\nbanaction = iptables-multiport" > /etc/fail2ban/jail.local
+      - systemctl enable fail2ban
+      - semanage port -a -t ssh_port_t -p tcp 22
+      - reboot
     EOF
 
     file_name = "${each.key}-user-data-cloud-config.yaml"

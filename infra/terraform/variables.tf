@@ -29,3 +29,12 @@ variable "servers" {
 variable "gateway" {
   type = string
 }
+
+variable "rhel_activation_key" {
+  type = string
+  sensitive = true
+}
+
+variable "rhel_organization" {
+  type = string
+}
