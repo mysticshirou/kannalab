@@ -1,3 +1,6 @@
----
-- name: Setup servers
-  hosts: servers
+- name: Setup k3s
+  ansible.builtin.import_playbook: k3s.orchestration.site
+
+- name: Setup GitOps
+  hosts: k3s_cluster
+  roles:

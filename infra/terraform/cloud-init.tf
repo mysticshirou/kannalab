@@ -46,6 +46,9 @@ resource "proxmox_virtual_environment_file" "user_data_cloud_config" {
       - printf "[sshd]\nenabled = true\nport = ssh, 22\nbanaction = iptables-multiport" > /etc/fail2ban/jail.local
       - systemctl enable fail2ban
       - semanage port -a -t ssh_port_t -p tcp 22
+      - firewall-cmd --add-port=6443/tcp --permanent
+      - firewall-cmd --add-port=80/tcp --permanent
+      - firewall-cmd --add-port=443/tcp --permanent
       - reboot
     EOF
 
