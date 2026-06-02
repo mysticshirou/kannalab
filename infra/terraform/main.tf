@@ -5,6 +5,12 @@ terraform {
       version = "~> 0.106.0"
     }
   }
+  cloud {
+    organization = "reunion"
+    workspaces {
+      name = "kannalab"
+    }
+  }
 }
 
 provider "proxmox" {
